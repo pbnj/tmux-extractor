@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 
 extract() {
-	tmux capture-pane -p \
+	tmux capture-pane -pJ \
 		| tr ' ' '\n' \
-		| tr -d '"' \
-		| tr -d "'" \
-		| tr -d ',' \
+		| tr -d ''\''"()[]*,;=\\|' \
 		| sort -u \
 		| fzf-tmux -d 20% --reverse
 }

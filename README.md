@@ -32,9 +32,17 @@ tmux source-file ~/.tmux.conf
 
 To extract text & insert into current tmux pane:
 
-```text
-<prefix> + C-e
-# fzf selection is inserted into current pane
+```sh
+$ alias extractor="</clone/path/to/tmux-extractor/extractor.sh>"
+
+# Now, you can invoke "extractor" whenever needed:
+$ vim $(extractor)
+
+# Or place a similar function in your .bashrc/.bash_profile/.zshrc/etc:
+vix() {
+    file="$(extractor)"
+    [ -n "$file" ] && vim "$file"
+}
 ```
 
 To open using the default program:
@@ -61,7 +69,6 @@ set -g <key> <value>
 
 The available options and their default values are:
 
-- `@tmux-extractor-extract-bind` = `C-e`
 - `@tmux-extractor-copy-bind` = `C-c`
 - `@tmux-extractor-copy-command` = `pbcopy`
 - `@tmux-extractor-open-bind` = `C-o`

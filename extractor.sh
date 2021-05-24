@@ -1,8 +1,4 @@
-#!/bin/bash
-
-set -eou pipefail
-
-set -x
+#!/usr/bin/env bash
 
 extract() {
 	tmux capture-pane -p \
@@ -10,9 +6,8 @@ extract() {
 		| tr -d '"' \
 		| tr -d "'" \
 		| tr -d ',' \
-		| sort \
-		| uniq \
-		| fzf-tmux --height=20% --reverse
+		| sort -u \
+		| fzf-tmux -d 20% --reverse
 }
 
 command="${1:-extract}"
@@ -21,8 +16,10 @@ if [ "${command}" = "extract" ]; then
 	extract
 elif [ "${command}" = "copy" ]; then
 	text="$(extract)"
-	[ -n "${text}" ] && echo "${text}" | pbcopy
+	[ -z "${text}" ] && exit
+	echo "${text}" | pbcopy
 elif [ "${command}" = "open" ]; then
 	text="$(extract)"
-	[ -n "${text}" ] && open "${text}"
+	[ -z "${text}" ] && exit
+	open "${text}"
 fi
